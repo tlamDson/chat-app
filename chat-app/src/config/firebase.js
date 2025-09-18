@@ -3,10 +3,19 @@ import { getAnalytics } from "firebase/analytics";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  setDoc,
+  doc,
+  collection,
+  query,
+  getDocs,
+  where,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 const firebaseConfig = {
   apiKey: "AIzaSyDLRgKLmJTLjr7IWwwKw4gHOTSzds_BoI4",
@@ -38,7 +47,7 @@ const signup = async (username, email, password) => {
       lastSeen: Date.now(),
     });
     await setDoc(doc(db, "chats", user.uid), {
-      chatsData: []
+      chatsData: [],
     });
   } catch (error) {
     console.error(error);
@@ -63,4 +72,26 @@ const logout = async () => {
     toast.error(error.code.split("/")[1].split("-").join(" "));
   }
 };
-export { signup, login, logout, auth, db };
+
+const resetPassword = async (email) => {
+  if (!email) {
+    toast.error("Enter your email");
+    return null;
+  }
+  try {
+    const userRef = collection(db, "users");
+    const q = query(userRef, where("email", "==", email));
+    const querySnap = await getDocs(q);
+    if (!querySnap.empty) {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Reset Email Sent");
+    } else {
+      toast.error("Email doesn't exist");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error(error.message);
+  }
+};
+
+export { signup, login, logout, auth, db, resetPassword };

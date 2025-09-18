@@ -1,5 +1,5 @@
 import { auth } from "../config/firebase";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 import { db } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ const AppContextProvider = (props) => {
   const [messagesId, setMessagesId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [chatUser, setChatUser] = useState(null);
-
+  const [chatVisible, setChatVisible] = useState(false);
   const loadUserData = async (uid) => {
     try {
       const userRef = doc(db, "users", uid);
@@ -25,8 +25,7 @@ const AppContextProvider = (props) => {
       } else {
         navigate("/profile");
       }
-      await (userRef,
-      {
+      await updateDoc(userRef, {
         lastSeen: Date.now(),
       });
       setInterval(async () => {
@@ -71,6 +70,8 @@ const AppContextProvider = (props) => {
     setMessagesId,
     chatUser,
     setChatUser,
+    chatVisible,
+    setChatVisible,
   };
 
   return (
