@@ -1,4 +1,4 @@
-# 💬 Chat App
+# 💬 Connectly
 
 A modern real-time chat application built with React, Firebase, and Vite. Features instant messaging, user authentication, profile management, and image sharing capabilities with a clean, responsive interface.
 
