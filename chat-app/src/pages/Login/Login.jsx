@@ -54,7 +54,16 @@ const Login = () => {
         </button>
         <div className="login-term">
           <input type="checkbox" />
-          <p>Agree to the terms of use & privacy policy</p>
+          <p>
+            Agree to the{" "}
+            <a
+              href="https://www.youtube.com/watch?v=DvlyzDZDEq4"
+              target={"_blank"}
+            >
+              terms of use
+            </a>{" "}
+            & privacy policy
+          </p>
         </div>
         <div className="login-forgot">
           {currState === "Sign up" ? (
